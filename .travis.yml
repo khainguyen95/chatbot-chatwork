@@ -8,7 +8,6 @@ before_install:
 - docker run -d --name app test
 - docker ps -a
 script:
-- docker exec app python -m unittest discover
 - docker tag test:latest khainguyendinh/test:production
 - docker push khainguyendinh/test:production
 after_script:
@@ -16,7 +15,6 @@ after_script:
 deploy:
  provider: script
  skip_cleanup: true
- script: chmod 600 deploy_key && ssh -o StrictHostKeyChecking=no -i ./deploy_key
-   ubuntu@demo-flask.buffenoir.tech './deploy.sh'
+ script: curl https://cli-assets.heroku.com/install.sh | sh && heroku
  on:
    branch: master
