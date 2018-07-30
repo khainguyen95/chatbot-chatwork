@@ -1,7 +1,22 @@
+sudo: required
 language: node_js
+services:
+- docker
+before_install:
+- docker login --email=khainguyenptiter@gmail.com --username=khainguyendinh --password=adgjmptw95
+- docker build -t test -f Dockerfile.
+- docker run -d --name app test
+- docker ps -a
+script:
+- docker exec app python -m unittest discover
+- docker tag test:latest khainguyendinh/test:production
+- docker push khainguyendinh/test:production
+after_script:
+- docker rm -f app
 deploy:
-  provider: heroku
-  api_key:
-    master: 2284a31d-93a8-4ca8-b80d-a49957c6d4e3
-  app:
-    master: agile-journey-36603
+ provider: script
+ skip_cleanup: true
+ script: chmod 600 deploy_key && ssh -o StrictHostKeyChecking=no -i ./deploy_key
+   ubuntu@demo-flask.buffenoir.tech './deploy.sh'
+ on:
+   branch: master
