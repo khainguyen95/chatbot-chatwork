@@ -8,13 +8,12 @@ before_install:
 - docker run -d --name app test
 - docker ps -a
 script:
-- docker tag test:latest khainguyendinh/test:production
-- docker push khainguyendinh/test:production
+- docker pull khainguyendinh/heroku
 after_script:
 - docker rm -f app
 deploy:
  provider: script
  skip_cleanup: true
- script: curl https://cli-assets.heroku.com/install.sh | sh && heroku container:login
+ script: docker run -it -v /var/run/docker.sock:/var/run/docker.sock khainguyendinh/heroku sh -c "./run.sh"
  on:
    branch: master
