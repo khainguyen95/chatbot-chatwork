@@ -1,0 +1,7 @@
+language: node_js
+deploy:
+  provider: heroku
+  api_key:
+    master: 2284a31d-93a8-4ca8-b80d-a49957c6d4e3
+  app:
+    master: agile-journey-36603
